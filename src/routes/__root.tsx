@@ -11,6 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app/AppSidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { AlertTriangle } from "lucide-react";
 
 function NotFoundComponent() {
   return (
@@ -124,8 +128,27 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SidebarProvider>
+        <div className="flex min-h-screen w-full bg-muted/30">
+          <AppSidebar />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
+              <SidebarTrigger />
+              <div className="flex-1">
+                <h2 className="text-sm font-semibold">AI Workplace Productivity Assistant</h2>
+              </div>
+            </header>
+            <div className="flex items-center gap-1.5 border-b bg-amber-50 px-4 py-2 text-xs text-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+              <AlertTriangle className="h-3.5 w-3.5" />
+              AI outputs may be inaccurate. Please review before use.
+            </div>
+            <main className="flex-1">
+              <Outlet />
+            </main>
+          </div>
+        </div>
+        <Toaster />
+      </SidebarProvider>
     </QueryClientProvider>
   );
 }
